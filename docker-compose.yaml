@@ -2,11 +2,13 @@ version: '3'
 
 services:
   python-env:
-    image: python:3.8
+    build:
+      context: .
     stdin_open: true
     tty: true
     volumes:
-      - ./:/app
+      - ./output:/app/output
+      - ./extras:/app/extras
 
   postgres:
     image: postgres:13
@@ -17,7 +19,7 @@ services:
     volumes:
       - postgres-db-volume:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "user", "-d", "password"] 
+      test: ["CMD", "pg_isready", "-U", "user", "-d", "churn"]
       interval: 5s
       retries: 3
     restart: always
