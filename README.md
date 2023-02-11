@@ -23,9 +23,24 @@ Before you can load data or run the code you have to do some setup on your syste
 
 ### Pre-Requisite Setup
 
-Python and PostgreSQL are required.
+Using docker compose to start the services
 
-- [**Pre-Requisites - Start Here!**](./readme_files/prereq.md)
+```bash
+docker compose up
+docker exec -it fight-churn-python-env-1 /app/venv/bin/ipython
+```
+
+Run Python to generate simulations
+
+```python
+from fightchurn import run_churn_listing
+
+run_churn_listing.set_churn_environment(
+  db='churn', user='postgres', password='password', output_dir='/app/output', host="postgres-db"
+)
+
+run_churn_listing.run_standard_simulation(init_customers=10000)
+```
 
 ### Code Setup
 

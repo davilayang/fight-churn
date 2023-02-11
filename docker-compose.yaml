@@ -9,11 +9,12 @@ services:
     volumes:
       - ./output:/app/output
       - ./extras:/app/extras
+    # command: /app/venv/bin/ipython
 
-  postgres:
+  postgres-db:
     image: postgres:13
     environment:
-      POSTGRES_USER: user
+      # POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       POSTGRES_DB: churn
     volumes:
