@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  python-env:
+    image: python:3.8
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./:/app
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: churn
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "user", "-d", "password"] 
+      interval: 5s
+      retries: 3
+    restart: always
+    ports:
+      - 5432:5432 # allowing host to connect to backend db, for dev only
+
+volumes:
+  postgres-db-volume:
