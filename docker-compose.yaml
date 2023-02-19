@@ -9,7 +9,7 @@ services:
     volumes:
       - ./output:/app/output
       - ./extras:/app/extras
-      - ./notebooks:/app/noteboks
+      - ./notebooks:/app/notebooks
     # command: /app/venv/bin/ipython
     ports:
       - 8888:8888
