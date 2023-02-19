@@ -1,9 +1,8 @@
 
-
-
 INSERT into metric_name values (%new_metric_id,concat('%new_metric_name'))
 ON CONFLICT DO NOTHING;
 
+-- numerator metric
 WITH num_metric AS (
 			SELECT
 					account_id,
@@ -15,7 +14,8 @@ WITH num_metric AS (
 	 				ON n.metric_name_id = m.metric_name_id
 		 		 AND n.metric_name = '%num_metric'
 		 		 AND metric_time BETWEEN '%from_yyyy-mm-dd' AND '%to_yyyy-mm-dd'
-), den_metric AS (
+), -- denominator metric
+den_metric AS (
 			SELECT
 					account_id,
 					metric_time,
