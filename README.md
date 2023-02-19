@@ -48,7 +48,13 @@ After the pre-requesisites, you have a choice on how to run the Fighting Churn W
 
 - [Command Line Setup](./readme_files/cmdline.md) : The fastest and easiest way to get started, using a `pip` Python package installation. This is great if you want to run the code and see the output, but you do not want to change the code or run it line by line.
 - [Jupyter Notebook Setup](readme_files/notebook.md) : This is another way to get started quickly, if you already have Jupyter Notebooks installed.
-  - Run this command  to start Jupyter server: `docker exec -it fight-churn-python-env-1 /app/venv/bin/jupyter lab --ip 0.0.0.0 --allow-root --port 8888 --no-browser`
+  - Run this command  to start Jupyter server: 
+
+    ```bash
+    docker exec -it fight-churn-python-env-1 /app/venv/bin/jupyter lab \
+      --ip 0.0.0.0 --allow-root --port 8888 --no-browser
+    ```
+
   - Then access Jupyter Lab at `https://localhost:8888`
 - [Developers IDE Setup](readme_files/ide.md) : This method takes more time, but allows you to run 
   the code line by line in a debugger, or change it. (If you are a professional developer 
