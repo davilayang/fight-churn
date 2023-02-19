@@ -23,7 +23,7 @@ services:
     volumes:
       - postgres-db-volume:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "user", "-d", "churn"]
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "churn"]
       interval: 5s
       retries: 3
     restart: always
