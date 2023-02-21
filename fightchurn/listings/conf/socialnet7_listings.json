@@ -740,8 +740,8 @@
         "list2": {
             "name": "logistic_regression",
             "params": {},
-            "v1" : {
-                "as_retention" : false
+            "v1": {
+                "as_retention": false
             }
         },
         "list3": {
@@ -850,8 +850,15 @@
         "list8": {
             "name": "shap_explain_xgb",
             "params": {},
-            "v1" : {
-                "plot_n" : [0, 1, 2, 3 ,4 ,5]
+            "v1": {
+                "plot_n": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5
+                ]
             }
         },
         "list9": {
