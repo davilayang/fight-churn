@@ -1,41 +1,61 @@
-with RECURSIVE active_period_params as    
-(
-	select INTERVAL '%gap_interval' as allowed_gap,
-	       '%to_yyyy-mm-dd'::date as observe_end,
-	       '%from_yyyy-mm-dd'::date as observe_start
+-- listing_4_2_churned_periods.sql
+
+WITH RECURSIVE active_period_params AS (
+	SELECT INTERVAL '%gap_interval' AS allowed_gap,
+	       '%to_yyyy-mm-dd'::date AS observe_end,
+	       '%from_yyyy-mm-dd'::date AS observe_start
 ),
-end_dates as    
-(
-	select distinct account_id, start_date, end_date, 
-(end_date +  allowed_gap)::date as extension_max
-	from subscription inner join active_period_params 
-	on end_date between observe_start and observe_end    
+end_dates AS (
+  	SELECT 
+  DISTINCT 
+        account_id, 
+        start_date, 
+        end_date, 
+        (end_date +  allowed_gap)::date AS extension_max 
+      FROM 
+        subscription 
+INNER JOIN active_period_params 
+	      ON end_date BETWEEN observe_start AND observe_end    
 ), 
-resignups as     
-(
-	select distinct e.account_id, e.end_date   
-	from end_dates e inner join subscription s on e.account_id = s.account_id
-		and s.start_date <= e.extension_max
-		and (s.end_date > e.end_date or s.end_date is null)      
+resignups AS (
+	  SELECT 
+  DISTINCT 
+        e.account_id, 
+        e.end_date   
+	    FROM end_dates e 
+INNER JOIN subscription s 
+        ON e.account_id = s.account_id
+		   AND s.start_date <= e.extension_max
+		   AND (s.end_date > e.end_date 
+        OR s.end_date IS null)      
 ),
-churns as    
-(
-	select e.account_id, e.start_date, e.end_date as churn_date    
-	from end_dates e left outer join resignups r  
-	on e.account_id = r.account_id    
-		and e.end_date = r.end_date
-	where r.end_date is null    
+churns AS (
+	       SELECT 
+             e.account_id, 
+             e.start_date, 
+             e.end_date AS churn_date    
+	         FROM 
+             end_dates e 
+LEFT OUTER JOIN resignups r  ON e.account_id = r.account_id    
+		        AND e.end_date = r.end_date
+        	WHERE r.end_date IS null
 
-	UNION
+        	UNION
 
-	select s.account_id, s.start_date, e.churn_date    
-	from subscription s 
-	cross join active_period_params
-	inner join churns e on s.account_id=e.account_id
-		and s.start_date < e.start_date
-		and s.end_date >= (e.start_date- allowed_gap)::date
+	       SELECT 
+              s.account_id, 
+              s.start_date, 
+              e.churn_date    
+	         FROM subscription s 
+	   CROSS JOIN active_period_params
+	   INNER JOIN churns e ON s.account_id=e.account_id
+		        AND s.start_date < e.start_date
+		        AND s.end_date >= (e.start_date- allowed_gap)::date
 ) 
-insert into active_period (account_id, start_date, churn_date)    
-select account_id, min(start_date) as start_date, churn_date  
-from churns
-group by account_id, churn_date
+INSERT INTO active_period (account_id, start_date, churn_date)    
+    SELECT 
+        account_id, 
+        MIn(start_date) AS start_date, 
+        churn_date  
+      FROM churns
+  GROUP BY account_id, churn_date

@@ -1,4 +1,5 @@
 -- 4.3.3 Finding active periods that are ongoing
+
 WITH RECURSIVE active_period_params AS (
     SELECT
         interval '%gap_interval' AS allowed_gap,
