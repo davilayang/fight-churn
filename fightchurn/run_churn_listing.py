@@ -13,8 +13,6 @@ from fightchurn.datagen import churnsim
 from datetime import date
 from typing import List, Union
 
-sys.path.append("/app")
-
 """
 ####################################################################################################
 Arguments
