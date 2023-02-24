@@ -1,23 +1,31 @@
-with observation_params as     
-(
-    select  interval '%metric_interval' as metric_period,
-    '%from_yyyy-mm-dd'::timestamp as obs_start,
-    '%to_yyyy-mm-dd'::timestamp as obs_end
+-- listing_4_5_dataset.sql
+
+WITH observation_params AS (
+    SELECT
+        interval '%metric_interval' AS metric_period,
+        '%from_yyyy-mm-dd'::timestamp AS obs_start,
+        '%to_yyyy-mm-dd'::timestamp AS obs_end
 )
-select m.account_id, o.observation_date, is_churn,
-sum(case when metric_name_id=0 then metric_value else 0 end) as like_per_month,
-sum(case when metric_name_id=1 then metric_value else 0 end) as newfriend_per_month,
-sum(case when metric_name_id=2 then metric_value else 0 end) as post_per_month,
-sum(case when metric_name_id=3 then metric_value else 0 end) as adview_per_month,
-sum(case when metric_name_id=4 then metric_value else 0 end) as dislike_per_month,
-sum(case when metric_name_id=5 then metric_value else 0 end) as unfriend_per_month,
-sum(case when metric_name_id=6 then metric_value else 0 end) as message_per_month,
-sum(case when metric_name_id=7 then metric_value else 0 end) as reply_per_month,
-sum(case when metric_name_id=8 then metric_value else 0 end) as account_tenure
-from metric m inner join observation_params
-on metric_time between obs_start and obs_end    
-inner join observation o on m.account_id = o.account_id
-    and m.metric_time > (o.observation_date - metric_period)::timestamp    
-    and m.metric_time <= o.observation_date::timestamp
-group by m.account_id, metric_time, observation_date, is_churn    
-order by observation_date,m.account_id
+
+    SELECT
+        m.account_id,
+        o.observation_date,
+        is_churn,
+        SUM(CASE WHEN metric_name_id=0 THEN metric_value ELSE 0 END) AS like_per_month,
+        SUM(CASE WHEN metric_name_id=1 THEN metric_value ELSE 0 END) AS newfriend_per_month,
+        SUM(CASE WHEN metric_name_id=2 THEN metric_value ELSE 0 END) AS post_per_month,
+        SUM(CASE WHEN metric_name_id=3 THEN metric_value ELSE 0 END) AS adview_per_month,
+        SUM(CASE WHEN metric_name_id=4 THEN metric_value ELSE 0 END) AS dislike_per_month,
+        SUM(CASE WHEN metric_name_id=5 THEN metric_value ELSE 0 END) AS unfriend_per_month,
+        SUM(CASE WHEN metric_name_id=6 THEN metric_value ELSE 0 END) AS message_per_month,
+        SUM(CASE WHEN metric_name_id=7 THEN metric_value ELSE 0 END) AS reply_per_month,
+        SUM(CASE WHEN metric_name_id=8 THEN metric_value ELSE 0 END) AS account_tenure
+      FROM metric AS m
+INNER JOIN observation_params
+        ON metric_time BETWEEN obs_start AND obs_end
+INNER JOIN observation AS o
+        ON m.account_id = o.account_id
+          AND m.metric_time > (o.observation_date - metric_period)::timestamp
+          AND m.metric_time <= o.observation_date::timestamp
+  GROUP BY m.account_id, metric_time, observation_date, is_churn
+  ORDER BY observation_date,m.account_id
