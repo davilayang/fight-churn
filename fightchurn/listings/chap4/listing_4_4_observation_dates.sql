@@ -26,23 +26,23 @@ INNER JOIN observation_params
   UNION
 
     SELECT
-        o.account_id,
-        o.start_date,
+        obs.account_id,
+        obs.start_date,
         obs_count+1 AS obs_count,
-        (o.start_date+(obs_count+1)*obs_interval-lead_time)::date AS obs_date,
+        (obs.start_date+(obs_count+1)*obs_interval-lead_time)::date AS obs_date,
       CASE
-        WHEN churn_date >= (o.start_date + (obs_count+1)*obs_interval-lead_time)::date
-            AND churn_date < (o.start_date + (obs_count+2)*obs_interval-lead_time)::date
+        WHEN churn_date >= (obs.start_date + (obs_count+1)*obs_interval-lead_time)::date
+            AND churn_date < (obs.start_date + (obs_count+2)*obs_interval-lead_time)::date
           THEN true
           ELSE false
        END AS is_churn
-      FROM observations o
+      FROM observations AS obs
 INNER JOIN observation_params
-        ON (o.start_date+(obs_count+1)*obs_interval-lead_time)::date <= obs_end
-INNER JOIN active_period s
-        ON s.account_id=o.account_id
-          AND (o.start_date+(obs_count+1)*obs_interval-lead_time)::date >= s.start_date
-          AND ((o.start_date+(obs_count+1)*obs_interval-lead_time)::date < s.churn_date
+        ON (obs.start_date+(obs_count+1)*obs_interval-lead_time)::date <= obs_end
+INNER JOIN active_period AS active
+        ON active.account_id=obs.account_id
+          AND (obs.start_date+(obs_count+1)*obs_interval-lead_time)::date >= active.start_date
+          AND ((obs.start_date+(obs_count+1)*obs_interval-lead_time)::date < active.churn_date
                 OR churn_date IS null)
 )
 
