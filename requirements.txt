@@ -54,4 +54,3 @@ zipp==3.4.1
 ipython
 jupyterlab>=3.5.1,<4.0.0
 jupyterlab-vim>=0.15.1,<1.0.0
-jupyter_http_over_ws
