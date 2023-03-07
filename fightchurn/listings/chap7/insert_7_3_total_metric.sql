@@ -1,4 +1,6 @@
 -- insert_7_3_total_metric
+-- sum all values of metrics in the given list, forming a new metric
+-- e.g. likes_per_month and dislike_per_month
 
 INSERT into metric_name values (%new_metric_id,'%new_metric_name')
 ON CONFLICT DO NOTHING;

@@ -1,4 +1,7 @@
 -- insert_7_1_ratio_metric
+-- ratio as numerator metricd dividied by denominator metric
+-- e.g. post_per_month divided by adview_per_month
+-- e.g. message_per_month divided by reply_per_message
 
 INSERT into metric_name values (%new_metric_id,concat('%new_metric_name'))
 ON CONFLICT DO NOTHING;
