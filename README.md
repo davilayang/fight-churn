@@ -1,5 +1,3 @@
-
-
 # fight-churn
 
 <a name="top"/>
@@ -51,7 +49,7 @@ After the pre-requesisites, you have a choice on how to run the Fighting Churn W
   - Run this command  to start Jupyter server: 
 
     ```bash
-    docker exec -it fight-churn-python-env-1 /app/venv/bin/jupyter lab \
+    docker compose exec -it python-env /app/venv/bin/jupyter lab \
       --ip 0.0.0.0 --allow-root --port 8888 --no-browser
     ```
 

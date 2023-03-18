@@ -16,3 +16,11 @@ test_verbose:
 
 publish:
 	python3 -m twine upload dist/*
+
+compose-up:
+	docker compose up
+
+compose-jupyter:
+	docker compose exec -it python-env \
+		/app/venv/bin/jupyter lab \
+		--ip 0.0.0.0 --allow-root --port 8888 --no-browser
