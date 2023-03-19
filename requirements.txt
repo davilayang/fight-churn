@@ -52,5 +52,6 @@ zipp==3.4.1
 
 # additional
 ipython
+seaborn >= 0.12.2,<1.0.0
 jupyterlab>=3.5.1,<4.0.0
 jupyterlab-vim>=0.15.1,<1.0.0
